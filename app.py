@@ -2,7 +2,7 @@ import streamlit as st
 import base64
 import json
 import zlib
-from streamlit.components.v1 import html
+import requests
 
 def js_btoa(data):
     return base64.b64encode(data)
@@ -21,19 +21,37 @@ def genPakoLink(graphMarkdown: str):
     link = 'http://mermaid.live/edit#pako:' + dEncode.decode('ascii')
     return link
 
+def render_mermaid_image(mermaid_code):
+    url = "https://mermaid.ink/img/"
+    payload = {"code": mermaid_code}
+    try:
+        response = requests.post(url, json=payload)
+        if response.status_code == 200:
+            image_url = response.json().get("url")
+            return image_url
+        else:
+            st.error("Error rendering Mermaid image")
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
+
 # User Interface Creation
 st.title("Mermaid Code Renderer")
 
 # Mermaid code input
 mermaid_code = st.text_area("Enter Mermaid code here")
 
-# Generating link to mermaid.live
-if st.button("Generate link"):
+# Generating link to mermaid.live and rendering image
+if st.button("Generate link and Render Image"):
     if mermaid_code:
         mermaid_link = genPakoLink(mermaid_code)
         st.success("Here is the link for rendering on mermaid.live:")
         st.write(mermaid_link)
-        iframe_code = f'<iframe src="{mermaid_link}" height="600" width="100%" style="border:none;"></iframe>'
-        html(iframe_code)
+        
+        st.success("Here is the rendered image:")
+        mermaid_image_url = render_mermaid_image(mermaid_code)
+        if mermaid_image_url:
+            st.image(mermaid_image_url)
+        else:
+            st.warning("Failed to render Mermaid image")
     else:
         st.warning("Please enter Mermaid code to generate the link")
