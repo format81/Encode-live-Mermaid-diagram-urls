@@ -3,43 +3,34 @@ import base64
 import json
 import zlib
 
-def js_string_to_byte(data):
-    return bytes(data, 'ascii')
-
-def js_bytes_to_string(data):
-    return data.decode('ascii')
-
 def js_btoa(data):
     return base64.b64encode(data)
 
 def pako_deflate(data):
-    compress = zlib.compressobj(9, zlib.DEFLATED, 15, 8,zlib.Z_DEFAULT_STRATEGY)
+    compress = zlib.compressobj(9, zlib.DEFLATED, 15, 8, zlib.Z_DEFAULT_STRATEGY)
     compressed_data = compress.compress(data)
     compressed_data += compress.flush()
     return compressed_data
 
 def genPakoLink(graphMarkdown: str):
-    jGraph = {
-            "code": graphMarkdown,
-            "mermaid": {"theme": "default"}
-        }
-    byteStr = js_string_to_byte(json.dumps(jGraph))
+    jGraph = {"code": graphMarkdown, "mermaid": {"theme": "default"}}
+    byteStr = json.dumps(jGraph).encode('utf-8')
     deflated = pako_deflate(byteStr)
     dEncode = js_btoa(deflated)
-    link = 'http://mermaid.live/edit#pako:' + js_bytes_to_string(dEncode)
+    link = 'http://mermaid.live/edit#pako:' + dEncode.decode('ascii')
     return link
 
-# Creazione dell'interfaccia utente
+# User Interface Creation
 st.title("Mermaid Code Renderer")
 
-# Input del codice Mermaid
-mermaid_code = st.text_area("Inserisci il codice Mermaid qui")
+# Mermaid code input
+mermaid_code = st.text_area("Enter Mermaid code here")
 
-# Generazione del link a mermaid.live
-if st.button("Genera link"):
+# Generating link to mermaid.live
+if st.button("Generate link"):
     if mermaid_code:
         mermaid_link = genPakoLink(mermaid_code)
-        st.success("Ecco il link per il rendering su mermaid.live:")
+        st.success("Here is the link for rendering on mermaid.live:")
         st.write(mermaid_link)
     else:
-        st.warning("Inserisci il codice Mermaid per generare il link")
+        st.warning("Please enter Mermaid code to generate the link")
