@@ -2,7 +2,7 @@ import streamlit as st
 import base64
 import json
 import zlib
-from streamlit.components.v1 import iframe
+from streamlit.components.v1 import html
 
 def js_btoa(data):
     return base64.b64encode(data)
@@ -33,6 +33,7 @@ if st.button("Generate link"):
         mermaid_link = genPakoLink(mermaid_code)
         st.success("Here is the link for rendering on mermaid.live:")
         st.write(mermaid_link)
-        st.markdown(f'<iframe src="{mermaid_link}" height="600" width="100%"></iframe>', unsafe_allow_html=True)
+        iframe_code = f'<iframe src="{mermaid_link}" height="600" width="100%" style="border:none;"></iframe>'
+        html(iframe_code)
     else:
         st.warning("Please enter Mermaid code to generate the link")
