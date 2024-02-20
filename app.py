@@ -26,7 +26,7 @@ def genPakoLink(graphMarkdown: str):
     byteStr = js_string_to_byte(json.dumps(jGraph))
     deflated = pako_deflate(byteStr)
     dEncode = js_btoa(deflated)
-    link = 'http://mermaid.live/view#pako:' + js_bytes_to_string(dEncode)
+    link = 'http://mermaid.live/edit#pako:' + js_bytes_to_string(dEncode)
     return link
 
 # Creazione dell'interfaccia utente
