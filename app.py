@@ -29,7 +29,7 @@ st.sidebar.write("[Mermaid.js](https://mermaid.js.org/intro/)")
 st.sidebar.write("[TI Mindmap - GitHub](https://github.com/format81/TI-Mindmap-GPT)")
 st.sidebar.write("[TI Mindmap - Streamlit App](https://ti-mindmap-gpt.streamlit.app/)")
 
-st.markdown(
+st.sidebar.markdown(
         "If you find this small project useful, follow me on [LinkedIn]https://www.linkedin.com/in/antonioformato/ and give me a ⭐ Star on GitHub: [![Star on GitHub](https://img.shields.io/github/stars/format81/Encode-live-Mermaid-diagram-urls?style=social)](https://github.com/format81/Encode-live-Mermaid-diagram-urls)"
     )
 
